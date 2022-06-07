@@ -1,0 +1,55 @@
+@use "../../styles/themes";
+
+.container{
+    background: themes.$bg;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    
+    
+}
+.buttons{
+    display: flex;
+    flex-direction: column;
+    
+    & button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin: 2rem;
+        height: 50px;
+        width: 50px;
+        
+        border-radius: 50%;
+        background: transparent;
+        border: 0;
+    }
+
+    
+    & button svg{
+        width: 25px;
+        height: 25px;
+        transition: all 0.1s;
+    }
+
+    & button:hover svg{
+        width: 30px;
+        height: 30px;
+    }
+
+    & button:active{
+        background-color: rgba(39, 43, 43, 0.103);
+    }
+
+    & button:active svg{
+        width: 20px;
+        height: 20px;
+    }
+
+    & button:last-child {
+        margin-top: 6rem;
+    }
+}

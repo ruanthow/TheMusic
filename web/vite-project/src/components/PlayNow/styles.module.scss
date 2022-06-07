@@ -1,0 +1,172 @@
+@use '../../styles/themes';
+
+.container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: themes.$bg;
+    color: themes.$color-text;
+    
+    & h2{
+        margin: 1.5rem;
+
+    }
+
+    & .imgCover{
+        display: flex;
+        align-items: center;
+
+        width: 100%;
+        max-width: 250px;
+        min-width: 150px;
+
+    }
+    & .imgCover img{
+        width: 100%;
+    }
+
+    & .musicInfo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    & .musicInfo p:first-child{
+        font-size: 18pt;
+        font-weight: 500;
+        color: themes.$color-text; 
+    }
+    & .musicInfo p:last-child{
+        font-size: 11pt;
+        font-weight: 500;   
+        color: themes.$brand; 
+        margin-bottom: 1rem;
+    }
+
+    & .controllersBar{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+
+        margin: 0.5rem 0;      
+    }
+
+    & .controllersBar span{
+        padding: 0 0.5rem
+    }
+
+    & .slider{
+        width: 250px;
+        margin: 0 0.5rem;
+    }
+
+    & .controllersButtons{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    & .controllersButtons button{  
+        border: 0;
+    }
+
+    & .othersButtons{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        margin: 0 0.5rem;
+        background: none;
+        border-radius: 100%;
+
+        width: 30px;
+        height: 30px;
+
+        transition: all 0.2s;
+    }
+    
+    & .othersButtons:active{
+        background: rgb(255, 255, 255);
+        border-radius: 50%;
+
+        
+    }
+    
+    & .othersButtons svg{
+        width: 25px;
+        height: 25px;
+    }
+    
+    & .othersButtons:active svg{
+        width: 20px;
+        height: 20px;
+    }
+
+    
+
+    & .playerButton{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 0.5rem;
+        background: none;
+        border-radius: 100%;
+
+        width: 45px;
+        height: 45px;
+
+        transition: all 0.2s;
+    }
+
+    & .playerButton:active{
+        
+        background: rgb(255, 255, 255);
+        border-radius: 50%;
+        
+    }
+
+    & .playerButton svg{
+        width: 40px;
+        height: 40px;
+    }
+    
+    & .playerButton:active svg{
+        
+        width: 35px;
+        height: 35px;
+    }
+
+    & .playerlist{
+        overflow-y: scroll;
+        width: 300px;
+       
+        border: 1px solid black
+    }
+
+    & .musicOfPlaylist{
+       display: flex;
+        margin: 1rem;
+    }
+    & .musicOfPlaylist button{
+      height: 50px;
+      width: 50px;
+
+      background: transparent;
+      border: 0;
+    }
+    & .musicOfPlaylist button svg{
+      height: 35px;
+      width: 35px;
+    }
+    
+    & .musicDetailsOfPlaylist{
+        display: flex;
+        flex-direction: column;
+
+        width: 90%;
+       
+    }
+}

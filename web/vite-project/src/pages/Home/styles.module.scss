@@ -1,0 +1,16 @@
+.container{
+    
+    height: 100vh;
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: 0.1fr 1fr 0.35fr;
+
+    
+    .div3{
+        height: 100vh;
+        width: 100%;
+        background: rgb(20, 20, 20);
+    }
+}
+
