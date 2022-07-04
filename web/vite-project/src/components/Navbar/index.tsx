@@ -6,6 +6,7 @@ import { BsFillGearFill } from 'react-icons/bs'
 import styles from './styles.module.scss';
 
 export function Navbar() {
+    
 
     return (
         <div className={styles.container}>
