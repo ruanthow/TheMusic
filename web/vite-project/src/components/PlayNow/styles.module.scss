@@ -2,78 +2,86 @@
 
 .container{
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
+    width: 55rem;
 
     overflow: hidden;
 
     background: themes.$bg;
     color: themes.$color-text;
     
+
     & h2{
         margin: 1.5rem;
-
+        
     }
 
     & .imgCover{
-        display: flex;
-        align-items: center;
+      
+        max-width: 15rem;
+        min-width: 10rem;
 
-        width: 100%;
-        max-width: 250px;
-        min-width: 150px;
+        & img{
+            border-radius: 8px;
+            width: 100%;
+        }
 
     }
-    & .imgCover img{
-        width: 100%;
-    }
+    
 
-    & .musicInfo{
+    .musicInfo{
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-    }
-    & .musicInfo p:first-child{
-        font-size: 18pt;
-        font-weight: 500;
-        color: themes.$color-text; 
-    }
-    & .musicInfo p:last-child{
-        font-size: 11pt;
-        font-weight: 500;   
-        color: themes.$brand; 
-        margin-bottom: 1rem;
-    }
 
-    & .controllersBar{
+        & p:first-child{
+            font-size: 18pt;
+            font-weight: 500;
+            color: themes.$color-text; 
+        }
+
+        & p:last-child{
+            font-size: 11pt;
+            font-weight: 500;   
+            color: themes.$brand; 
+            margin-bottom: 1rem;
+        }
+    } 
+    
+
+    .controllersBar{
         display: flex;
         align-items: center;
         flex-direction: row;
 
-        margin: 0.5rem 0;      
+        margin: 0.5rem 0;
+        
+        & span{
+            padding: 0 0.5rem
+        }
     }
 
-    & .controllersBar span{
-        padding: 0 0.5rem
-    }
-
-    & .slider{
-        width: 250px;
+    .slider{
+        max-width: 15.625rem;
+        min-width: 12rem;
         margin: 0 0.5rem;
     }
 
-    & .controllersButtons{
+    .controllersButtons{
         display: flex;
         justify-content: center;
         align-items: center;
+
+        & button{  
+            border: 0;
+        }
     }
 
-    & .controllersButtons button{  
-        border: 0;
-    }
+    
 
-    & .othersButtons{
+    .othersButtons{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -86,28 +94,50 @@
         height: 30px;
 
         transition: all 0.2s;
-    }
-    
-    & .othersButtons:active{
-        background: rgb(255, 255, 255);
-        border-radius: 50%;
 
+        &:active{
+            background: rgb(255, 255, 255);
+            border-radius: 50%;
+    
+            
+        }
         
-    }
-    
-    & .othersButtons svg{
-        width: 25px;
-        height: 25px;
-    }
-    
-    & .othersButtons:active svg{
-        width: 20px;
-        height: 20px;
+        & svg{
+            width: 25px;
+            height: 25px;
+            color: themes.$brand-dark
+        }
+        
+        &:active svg{
+            width: 20px;
+            height: 20px;
+        }
     }
 
+    .sliderVolume{
+        
+        width: 50px;
+        opacity: 1;
+        transition: 1s ease-in-out;
+    }
+    .sliderVolumeHidden{
+        transition: all 0.5s;
+        width: 0;
+        opacity: 0;
+    }
     
+    .titleOfList{
+       width: 100%;
 
-    & .playerButton{
+       & p{
+           margin: 0.5rem 1.5rem;
+           font-size: 17pt;
+           font-weight: 700;
+
+       }
+    }
+    
+    .playerButton{
         display: flex;
         justify-content: center;
         align-items: center;
@@ -119,54 +149,76 @@
         height: 45px;
 
         transition: all 0.2s;
-    }
 
-    & .playerButton:active{
+        &:active{
         
-        background: rgb(255, 255, 255);
-        border-radius: 50%;
-        
-    }
-
-    & .playerButton svg{
-        width: 40px;
-        height: 40px;
-    }
+            background: rgb(255, 255, 255);
+            border-radius: 50%;
+            
+        }
     
-    & .playerButton:active svg{
+        & svg{
+            width: 40px;
+            height: 40px;
+            color: themes.$brand-dark;
+        }
         
-        width: 35px;
-        height: 35px;
+        &:active svg{
+            
+            width: 35px;
+            height: 35px;
+        }
     }
 
-    & .playerlist{
+    .playerlist{
+        width: 80%;
         overflow-y: scroll;
-        width: 300px;
+        
+        &::-webkit-scrollbar{
+           width: 1rem;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: themes.$brand-dark; 
+            border-radius: 10px;
+        }
+          
+        &::-webkit-scrollbar-thumb:hover {
+            background: themes.$brand-light; 
+        }
        
-        border: 1px solid black
+        border-radius: 8px;
+        box-shadow: 0 20px 20px rgba(0, 0, 0, 0.74);
     }
 
-    & .musicOfPlaylist{
-       display: flex;
+    .musicOfPlaylist{
+        display: flex;
         margin: 1rem;
-    }
-    & .musicOfPlaylist button{
-      height: 50px;
-      width: 50px;
 
-      background: transparent;
-      border: 0;
-    }
-    & .musicOfPlaylist button svg{
-      height: 35px;
-      width: 35px;
+        & button{
+            height: 50px;
+            width: 50px;
+      
+            background: transparent;
+            border: 0;
+          }
+          & button svg{
+            height: 35px;
+            width: 35px;
+          }
     }
     
-    & .musicDetailsOfPlaylist{
+    
+    .musicDetailsOfPlaylist{
         display: flex;
         flex-direction: column;
 
-        width: 90%;
-       
+        width: 90%;  
+
+        & p{
+            font-size: 11pt;
+            opacity: 0.5;
+        }
     }
+
+   
 }

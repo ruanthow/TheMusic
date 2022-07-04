@@ -1,24 +1,36 @@
 @use '../../styles/themes';
 
-.container{
+.container {
     background: themes.$brand;
+
     overflow: hidden;
-    width: 100%;
-    
-    .header{
-        margin: 2rem 2rem 2rem 2rem;
-    
-        & h1{
+
+    & .mainBody {
+        overflow: hidden;
+        margin: 2rem;
+        height: 95vh;
+    }
+
+    h3 {
+        color: themes.$color-text;
+        margin-bottom: 1rem;
+    }
+
+    .header {
+
+        & h1 {
             font-size: 1.5rem;
             margin-bottom: 2rem;
             color: themes.$color-text;
         }
-    
-        & form{
+
+        & form {
             display: flex;
             justify-items: center;
+            margin-bottom: 1rem;
         }
-        & form input{
+
+        & form input {
             height: 3rem;
             width: 60%;
             border: 0;
@@ -26,31 +38,34 @@
             padding: 0 1rem 0 1rem;
             font-size: 14pt;
         }
-        & form input:focus{
-           outline: none;
+
+        & form input:focus {
+            outline: none;
         }
-        & form button{
+
+        & form button {
             height: 3rem;
             width: 4rem;
             border: 1px solid rgb(255, 255, 255);
-            border-radius: 0 0.5rem  0.5rem 0;
-            background-color: rgba(0, 0, 0, 0.473);   
+            border-radius: 0 0.5rem 0.5rem 0;
+            background-color: rgba(0, 0, 0, 0.473);
         }
-        
-        & form button svg{
+
+        & form button svg {
             height: 25px;
             width: 25px;
         }
-        
-        & form button:active svg{
+
+        & form button:active svg {
             animation: buttonEffect 0.2s;
-    
+
             @keyframes buttonEffect {
-                to{
+                to {
                     height: 20px;
                     width: 20px;
                 }
-                from{
+
+                from {
                     height: 25px;
                     width: 25px;
                 }
@@ -58,166 +73,267 @@
         }
     }
 
-    .topMusics{
-        margin: 2rem 2rem 2rem 2rem;
+    .topMusics {
         display: flex;
-        width: 100%;
+        position: relative;
+        scroll-behavior: smooth;
+        overflow-x: scroll;
         
-        & .music{
-            margin-right:1rem;
+
+        &::-webkit-scrollbar {
+            display: none;
         }
-        & .musicImage{
+
+        & .music {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            user-select: none;
+        }
+
+        & .musicImage {
             max-width: 450px;
-            min-width: 200px;
+            min-width: 225px;
+            cursor: pointer;
+            position: relative;
         }
-        & .musicImage img{
+
+        & .musicImage img {
             width: 100%;
             border-radius: 8px;
         }
+
         & .musicDetails {
             color: themes.$color-text;
         }
-        & .musicDetails p:first-child{
+
+        & .musicDetails p:first-child {
             font-weight: 500;
             font-size: 14pt;
         }
-        & .musicDetails p:last-child{
+
+        & .musicDetails p:last-child {
             font-weight: 400;
             opacity: 0.5;
             font-size: 11pt;
         }
     }
-    .topMusicAndPlaylist{
+
+    .buttonsArrows {
         display: flex;
-        margin: 2rem;
-    
-    }
+        justify-content: center;
+        align-items: center;
 
-    .lastMusics{
-        width: 50%;
-        & h1{
-            color: themes.$color-text;
-            font-size: 16pt;
-            margin: 1rem 0;
-        }
-
-        & .listLastMusicsCard{
-            height: 250px;
-            overflow-y: scroll;
-            width: 100%;
-            
-            &::-webkit-scrollbar {
-                width: 1rem;
-              }
-              
-              /* Track */
-              &::-webkit-scrollbar-track {
-                box-shadow: 0 0 5px grey; 
-                border-radius: 10px;
-              }
-               
-              /* Handle */
-              &::-webkit-scrollbar-thumb {
-                background: themes.$brand-dark; 
-                border-radius: 10px;
-              }
-              
-              /* Handle on hover */
-              &::-webkit-scrollbar-thumb:hover {
-                background: themes.$brand-light; 
-              }
-        }
-        & .listLastMusics{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        & .lastMusic{
-            display: flex;
-            align-items: center;
-
-            width: 100%;
-        }
-
-        & .lastMusicImage{
-            width: 80px;
-            height: 80px;
-            margin-right: 1rem ;
-        }
-
-        & .lastMusicImage img{
-           width: 100%;
-           border-radius: 8px;
-           
-        }
-
-        & .lastMusicDetails p:first-child{
-            color: themes.$color-text;
-            font-size: 15pt;
-            font-weight: 500;
-        }
-
-        & .lastMusicDetails p:last-child{
-            color: themes.$color-text;
-            font-size: 12pt;
-            font-weight: 400;
-            opacity: 0.39;
-        }
-        
-        & .lastMusicButtons{
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           width: 10rem;
-           
-        }
-        & .lastMusicButtons button{
-            background-color: transparent;
-            border: 0;
-            margin: 1rem;
-            transition: ease 0.2s;
-            height: 50px;
-            width: 50px;
-        }
-        & .lastMusicButtons button:active{
-            background-color: rgba(0, 0, 0, 0.199);
-            border-radius: 100%;
-        }
-
-        & .lastMusicButtons button:active svg{
-            height: 35px;
-            width: 35px;
-            
-        }
-
-        & .lastMusicButtons svg{
-            height: 40px;
-            width: 40px;
-        }
-    }
-
-    .playlistCard{
-        width: 50%;
-        & h1{
-            color: themes.$color-text;;
-            font-size: 16pt;
-            margin: 1rem 0;
-        }
-
-        & .playlist{
+        & .buttonArrowLeft,
+        .buttonArrowRight {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 1rem;
+
+            height: 2rem;
+            width: 2rem;
+
+            margin: 0.5rem;
         }
 
-        & .playlist div:first-child{
+        & .buttonArrowLeft svg,
+        .buttonArrowRight svg {
+            height: 2rem;
+            width: 2rem;
+
+            cursor: pointer;
+            transition: all ease-in-out 0.1s;
+        }
+
+        & .buttonArrowLeft:active,
+        .buttonArrowRight:active {
+
+            border-radius: 100%;
+            height: 2rem;
+            width: 2rem;
+
+            background: rgba(0, 0, 0, 0.13);
+        }
+
+        & .buttonArrowLeft:active svg,
+        .buttonArrowRight:active svg {
+            height: 1.8rem;
+            width: 1.8rem;
+
+        }
+    }
+
+    .footer {
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        h3 {
+            margin-bottom: 1rem;
+        }
+
+        & .maisTocadas {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            height: 35%;
+            margin-right: 0.2rem;
+
+            &::-webkit-scrollbar {
+                width: 1rem;
+            }
+
+            &::-webkit-scrollbar-track {
+                border-radius: 10px;
+                box-shadow: 0 0 5px rgba(128, 128, 128, 0.13);
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: themes.$brand-dark;
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: themes.$brand-light;
+            }
+        }
+
+        & .dataItem {
+            display: flex;
+            margin-bottom: 1rem;
+
+            & img {
+                border-radius: 0.5rem;
+                width: 5rem;
+                height: 5rem;
+            }
+        }
+
+        & .itemDetails {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 13rem;
+            margin: 0 1rem;
+
+            p:first-child {
+                color: themes.$color-text;
+                font-size: 13pt;
+            }
+
+            p:last-child {
+                color: themes.$color-text;
+                opacity: 0.5;
+                font-size: 11pt;
+            }
+        }
+
+        & .buttonPlay {
+            width: 3rem;
+            height: 3rem;
+            margin: 1rem;
+            border: none;
+            background: transparent;
+
+            transition: all 0.1s;
+        }
+
+        & .buttonPlay:active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.171);
+            border-radius: 100%;
+        }
+
+        & .buttonPlay svg {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        & .buttonPlay:active svg {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        & .dropbtn {
+            background-color: transparent;
+            color: white;
+            border: none;
+
+            & svg {
+                height: 3rem;
+                width: 3rem;
+            }
+        }
+
+
+        .dropdown {
+            margin: 1rem;
+            position: relative;
+            height: 3rem;
+            width: 3rem;
+        }
+
+        .dropdownContent {
+            display: none;
+            left: 0rem;
+            top: 3rem;
+            position: absolute;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 9;
+
             
-            margin-right: 1rem;
+            & button:first-child{
+                border-bottom: 1px solid themes.$brand-light;
+            }
+        }
+
+        .dropdown:hover {
+            transition: all 0.2s;
+            background: themes.$brand-dark;
+            display: flex;
+            justify-content: center;
+            svg{
+                height: 2.5rem;
+                width: 2.5rem;
+            }
+            .dropdownContent {
+
+                display: block;
+            }
+        }
+
+        .dropdownContent button {
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: themes.$brand-dark;
+            color: themes.$color-text;
+            width: 6rem;
+            height: 3rem;
+            border: 0;
+        }
+
+        .dropdownContent button:active{
+            background: themes.$bg;
+        }
+
+        
+
+        
+
+
+        & .playLists {
+            height: 35%;
+            display: flex;
+            justify-content: center;
+
+            & img {
+                margin: 1rem;
+            }
         }
     }
 
 }
-

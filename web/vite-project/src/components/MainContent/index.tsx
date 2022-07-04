@@ -1,17 +1,21 @@
-import { Key, useEffect, useState } from 'react'
 
 
-import { QueryClient, useQuery } from 'react-query'
+import { Key, useContext, useRef} from 'react'
+import { useQuery } from 'react-query'
+import { MainContentContexts } from '../UseContext/MainContentContext';
+
 import axios from 'axios';
 
-import styles from './styles.module.scss';
 
+import styles from './styles.module.scss';
 import { BsSearch } from 'react-icons/bs'
 import { AiOutlinePlayCircle, AiOutlineBars } from 'react-icons/ai'
+import list from '../../assets/list0.png';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { PlaynowContexts } from '../UseContext/PlaynowContext';
 
-import list0 from '../../assets/list0.png';
 
-import list1 from '../../assets/list1.png';
+
 
 interface MusicType {
     nameMusic: string;
@@ -24,9 +28,12 @@ interface MusicType {
 
 export function MainContent() {
 
+    const carroseul = useRef<HTMLDivElement | null>(null);
+    const { setMyPlaylist } = useContext(MainContentContexts)
+    const { setIndexPlaylist } = useContext(PlaynowContexts)
     const { data } = useQuery('getTopMusics', async function getTopMusics() {
         try {
-            const response = await axios.get("http://localhost:3333/music/all_music")
+            const response = await axios.get(`${import.meta.env.VITE_LOCAL_CONECTION}music/all_music`)
             return response.data
 
         }
@@ -37,72 +44,97 @@ export function MainContent() {
         staleTime: 1000 * 60 * 60
     })
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+
+    function ArrowRightTopMusic() {
+        if (carroseul.current) {
+            carroseul.current.scrollLeft += carroseul.current.offsetWidth;
+            
+        }
+
+    }
+    function ArrowLeftTopMusic() {
+        if (carroseul.current) {
+            carroseul.current.scrollLeft -= carroseul.current.offsetWidth;
+
+        }
+    }
+
+    function handleMoveToPlaylist(intoMusicFromPlayist: MusicType) {
+        setMyPlaylist((results) => [...results, intoMusicFromPlayist])
+    }
 
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <h1>Home</h1>
-                <form action="search">
-                    <input type="text" />
-                    <button type='submit'><BsSearch color='white' /></button>
-                </form>
-            </div>
-            <div className={styles.topMusics}>
-                {data?.map((music: MusicType, key: Key) => {
-                    return (
-                        <div key={key} className={styles.music}>
-                            <div className={styles.musicImage}>
-                                <img src={music.imagem} alt="capa do album" />
+            <div className={styles.mainBody}>
+                <div className={styles.header}>
+                    <h1>Home</h1>
+                    <form action="search">
+                        <input type="text" />
+                        <button type='submit'><BsSearch color='white' /></button>
+                    </form>
+                </div>
+                <div className={styles.topMusics} ref={carroseul}>
+                    {data?.map((music: MusicType, key: Key) => {
+                        return (
+                            <div
+                                key={key}
+                                className={styles.music}
+                                    onClick={() => {
+                                    setIndexPlaylist(0)
+                                    setMyPlaylist([music])     
+                                }}
+                            >
+                                <div className={styles.musicImage}>
+                                    <img src={music.imagem} alt="capa do album" />
+                                </div>
+                                <div className={styles.musicDetails}>
+                                    <p>{music.nameBand}</p>
+                                    <p>{music.nameMusic}</p>
+                                </div>
                             </div>
-                            <div className={styles.musicDetails}>
-                                <p>{music.nameBand}</p>
-                                <p>{music.nameMusic}</p>
-                            </div>
-                        </div>
-                    )
-                })}
-            </div>
-            <div className={styles.topMusicAndPlaylist}>
-                <div className={styles.lastMusics}>
-                    <h1>Mais Tocadas</h1>
-                    <div className={styles.listLastMusicsCard}>
+                        )
+                    })}
+                </div>
+                <div className={styles.buttonsArrows}>
+                    <div className={styles.buttonArrowLeft} onClick={ArrowLeftTopMusic}>
+                        <IoIosArrowBack color='white' />
+                    </div>
+                    <div className={styles.buttonArrowRight} onClick={ArrowRightTopMusic}>
+                        <IoIosArrowForward color='white' />
+                    </div>
+                </div>
+                <h3>Mais Tocadas</h3>
+                <div className={styles.footer}>
+                    <div className={styles.maisTocadas}>
                         {data?.map((music: MusicType, key: Key) => {
                             return (
-                                <div className={styles.listLastMusics}>
-                                    <div key={key} className={styles.lastMusic}>
-                                        <div className={styles.lastMusicImage}>
-                                            <img src={music.imagem} alt="" />
-                                        </div>
-                                        <div className={styles.lastMusicDetails}>
-                                            <p>{music.nameBand}</p>
-                                            <p>{music.nameMusic}</p>
-                                        </div>
+                                <div className={styles.dataItem} key={key}>
+                                    <img src={music.imagem} alt="Capa do Album" />
+                                    <div className={styles.itemDetails}>
+                                        <p>{music.nameBand}</p>
+                                        <p>{music.nameMusic}</p>
                                     </div>
-                                    <div className={styles.lastMusicButtons}>
-                                        <button>
-                                            <AiOutlinePlayCircle color='white' />
-                                        </button>
-                                        <button>
-                                            <AiOutlineBars color='white' />
-                                        </button>
+                                    <button className={styles.buttonPlay}>
+                                        <AiOutlinePlayCircle color='white' />
+                                    </button>
+                                    <div className={styles.dropdown}>
+                                        <button className={styles.dropbtn}><AiOutlineBars/></button>
+                                        <div className={styles.dropdownContent}>
+                                            <button onClick={() => {
+                                                
+                                                handleMoveToPlaylist(music)
+
+                                            }}>Adicionar a Playlist</button>
+                                            <button>Favoritar musica</button>
+                                        </div>
                                     </div>
                                 </div>
                             )
                         })}
                     </div>
-                </div>
-                <div className={styles.playlistCard}>
-                    <h1>Playlists</h1>
-                    <div className={styles.playlist}>
-                        <div>
-                            <img src={list0} alt="" />
-                        </div>
-                        <div>
-                            <img src={list1} alt="" />
-                        </div>
+                    <div className={styles.playLists}>
+                        <img src={list} alt="" />
+                        <img src={list} alt="" />
                     </div>
                 </div>
             </div>

@@ -1,109 +1,246 @@
-import { useEffect, useState } from 'react';
+import { Key, useContext, useEffect, useRef, useState } from 'react';
 
 
 import Slider from 'rc-slider'
 import { FiRepeat, FiSkipBack, FiSkipForward } from 'react-icons/fi'
-import { BsFillPlayCircleFill, BsVolumeUp } from 'react-icons/bs'
+import { BsFillPlayCircleFill, BsVolumeUp, BsPauseCircleFill } from 'react-icons/bs'
 import { BiShuffle } from 'react-icons/bi'
 
 
 import 'rc-slider/assets/index.css'
 import styles from '../PlayNow/styles.module.scss'
 
-import img from '../../assets/list0.png';
+import { MainContentContexts } from '../UseContext/MainContentContext';
+import { convertToMinToSec } from '../../util/ParseToMinToSec';
+
+import logo from '../../assets/logo.png'
+import { PlaynowContexts } from '../UseContext/PlaynowContext';
 
 
-export function PlayNow(){
 
-    const [handleSlider, setHandleSlider] = useState<number | number[]>(0)
-    
 
-    useEffect(() =>{
+export function PlayNow() {
+    const { currentMusic, myPlaylist } = useContext(MainContentContexts)
+    const { indexPlaylist, isPlaying, setIndexPlaylist, setIsPlaying, isShuffle, setIsShuffle } = useContext(PlaynowContexts)
+    const [progress, setProgress] = useState<number>()
+    const [isHiddenSliderVolume, setIsHiddenSliderVolume] = useState<boolean>(false)
+    const [volume, setVolume] = useState<number>(10)
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    function Progress() {
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0
+            audioRef.current.addEventListener('timeupdate', () => {
+                setProgress(Math.floor(audioRef.current.currentTime));
+            })
+        }
+    }
+
+    function HandleBarProgress(value: number) {
+        if (audioRef.current) {
+            audioRef.current.currentTime = value
+        }
+    }
+
+    function PlayExecute(value: boolean) {
+        setIsPlaying(!value)
+    }
+
+    function PlaySongOfPlaylist(e: number) {
+        setIndexPlaylist(e)
+    }
+
+    function Shuffle(value: boolean) {
+        setIsShuffle(!value)
+    }
+
+    function SkipSong() {
+        if (!isShuffle) {
+            if (myPlaylist.length - 1 >= indexPlaylist + 1) {
+                setIndexPlaylist(indexPlaylist + 1)
+            }
+            else{
+                alert("A lista chegou ao fim adicione mais musicas")
+            }
+        }
+        
+        else if (isShuffle) {
+            let nextNumber: number = Math.floor(Math.random() * myPlaylist.length);
+            let safeNumber: number = Math.floor(Math.random() * myPlaylist.length);
+            let currentNumber: number
+            
+            if(nextNumber != currentNumber){
+                currentNumber = nextNumber
+                setIndexPlaylist(currentNumber)
+            }
+            else{
+                setIndexPlaylist(safeNumber)     
+            }
        
-    }, [])
-    return(
+        }
+    }
+
+    function BackSong() {
+        if (indexPlaylist >= 1) {
+            setIndexPlaylist(indexPlaylist - 1)
+        }
+        else {
+            alert("Já está na primeira musica")
+        }
+    }
+
+    async function VerifyEndSong() {
+
+        audioRef.current.currentTime = 0
+        if(!isShuffle){
+            if (myPlaylist.length - 1 >= indexPlaylist + 1) {
+                setIndexPlaylist(indexPlaylist + 1)
+                setIsPlaying(true)
+            }
+        }
+        else{
+            
+            let nextNumber: number = Math.floor(Math.random() * myPlaylist.length);
+            let safeNumber: number = Math.floor(Math.random() * myPlaylist.length);
+            let currentNumber: number
+            
+            if(nextNumber != currentNumber){
+                currentNumber = nextNumber
+                setIndexPlaylist(currentNumber)
+            }
+            else{
+                setIndexPlaylist(safeNumber)     
+            }
+        }
+        
+    }
+
+    function HandleVolume(value: number) {
+        if (audioRef.current) {
+            let volume = value
+            setVolume(volume)
+            audioRef.current.volume = volume * 0.1
+        }
+
+    }
+
+    function HidenSliderVolume() {
+        if (audioRef.current && !isHiddenSliderVolume) {
+            setIsHiddenSliderVolume(true)
+        }
+        else if (audioRef.current && isHiddenSliderVolume) {
+            setIsHiddenSliderVolume(false)
+        }
+    }
+
+    useEffect(() => {
+        if (!audioRef.current) {
+            return
+        }
+        if (isPlaying) {
+            audioRef.current.play()
+        }
+        else {
+            audioRef.current.pause()
+        }
+    }, [isPlaying])
+
+    return (
+
         <div className={styles.container}>
-            <h2>Tocando Agora</h2>
-                <div className={styles.imgCover}>
-                    <img src={img}alt="" />
-                </div>
-                <div className={styles.musicInfo}>
-                    <p>Green day</p>
-                    <p>American idiot</p>
-                </div>
-                <div className={styles.controllersBar}>
-                  <span>0:00</span>  
-                  <Slider
+            <h2>{myPlaylist[indexPlaylist]?.imagem ? "Tocando Agora" : "Selecione uma musica"}</h2>
+            <div className={styles.imgCover}>
+                <img src={myPlaylist[indexPlaylist]?.imagem ? myPlaylist[indexPlaylist].imagem : logo} alt="" />
+            </div>
+            <div className={styles.musicInfo}>
+                <p>{myPlaylist[indexPlaylist]?.nameBand}</p>
+                <p>{myPlaylist[indexPlaylist]?.nameMusic}</p>
+            </div>
+            <div className={styles.controllersBar}>
+                <audio
+                    ref={audioRef}
+                    src={myPlaylist[indexPlaylist]?.audio}
+                    onLoadedMetadata={Progress}
+                    onEnded={VerifyEndSong}
+                    onPlay={() => { setIsPlaying(true) }}
+                    onPause={() => { setIsPlaying(false) }}
+                    autoPlay
+                />
+                <span>{convertToMinToSec(progress ?? 0)}</span>
+                <Slider
                     className={styles.slider}
-                    max={100}
-                    value={handleSlider}
-                    onChange={(e)=>{
-                        setHandleSlider(e)
+                    max={myPlaylist[indexPlaylist]?.minutes}
+                    value={progress}
+                    onChange={(e) => {
+                        HandleBarProgress(e)
+                    }}
+
+                    trackStyle={{ backgroundColor: '#434366' }}
+                    railStyle={{ backgroundColor: '#ffffff' }}
+                    handleStyle={{ borderColor: '#434366', borderWidth: 2, width: '20px', height: '20px', top: 2.1, opacity: 1 }}
+                />
+                <span>{convertToMinToSec(myPlaylist[indexPlaylist]?.minutes ?? 0)}</span>
+            </div>
+            <div className={styles.controllersButtons}>
+                <button className={styles.othersButtons} onClick={() => {
+                    Shuffle(isShuffle)
+                }}
+                >
+                    {isShuffle ? <BiShuffle color='white' /> : <BiShuffle />}
+                </button>
+                <button className={styles.othersButtons} onClick={BackSong}>
+                    <FiSkipBack />
+                </button>
+                <button
+                    className={styles.playerButton}
+                    onClick={() => {
+                        PlayExecute(isPlaying)
+                    }}
+                >
+                    {isPlaying ? <BsPauseCircleFill color='white' /> : <BsFillPlayCircleFill />}
+                </button>
+                <button className={styles.othersButtons} onClick={SkipSong}>
+                    <FiSkipForward />
+                </button>
+                <button className={styles.othersButtons}>
+                    <FiRepeat />
+                </button>
+                <button className={styles.othersButtons} onClick={HidenSliderVolume}>
+                    {isHiddenSliderVolume ? <BsVolumeUp color='white' /> : <BsVolumeUp />}
+                </button>
+                <Slider
+                    className={isHiddenSliderVolume ? styles.sliderVolume : styles.sliderVolumeHidden}
+                    disabled={!isHiddenSliderVolume}
+                    max={10}
+                    min={0}
+                    value={volume}
+                    onChange={(e) => {
+                        HandleVolume(e)
                     }}
                     trackStyle={{ backgroundColor: '#434366' }}
-                    railStyle={{ backgroundColor: '#ffffff'}}
-                    handleStyle={{ borderColor: '#434366', borderWidth: 2, width:'20px', height:'20px', top:2.1, opacity: 1}}
-                  />
-                  <span>0:00</span>
-                </div>
-                <div className={styles.controllersButtons}>
-                    <button className={styles.othersButtons}>
-                        <BiShuffle />
-                    </button>
-                    <button className={styles.othersButtons}>
-                        <FiSkipBack />
-                    </button>
-                    <button className={styles.playerButton}>
-                        <BsFillPlayCircleFill />
-                    </button>
-                    <button className={styles.othersButtons}>
-                        <FiSkipForward />
-                    </button>
-                    <button className={styles.othersButtons}>
-                        <FiRepeat />
-                    </button>
-                    <button className={styles.othersButtons}>
-                        <BsVolumeUp />
-                    </button>
-                </div>
+                    railStyle={{ backgroundColor: '#ffffff' }}
+                    handleStyle={{ borderColor: '#434366', borderWidth: 2, width: '15px', height: '15px', top: 5, opacity: 1 }}
+                />
+            </div>
+            <div className={styles.titleOfList}>
+                <p>Em fila</p>
+            </div>
             <div className={styles.playerlist}>
-                <h1>Em fila</h1>
-                <div className={styles.musicOfPlaylist}>
-                    <div className={styles.musicDetailsOfPlaylist}>
-                        <h3>Massacration</h3>
-                        <p>Metal Bucetation</p>
-                    </div>
-                    <button>
-                        <BsFillPlayCircleFill color='white'/>
-                    </button>
-                </div>
-                <div className={styles.musicOfPlaylist}>
-                    <div className={styles.musicDetailsOfPlaylist}>
-                        <h3>Massacration</h3>
-                        <p>Metal Bucetation</p>
-                    </div>
-                    <button>
-                        <BsFillPlayCircleFill color='white'/>
-                    </button>
-                </div>
-                <div className={styles.musicOfPlaylist}>
-                    <div className={styles.musicDetailsOfPlaylist}>
-                        <h3>Massacration</h3>
-                        <p>Metal Bucetation</p>
-                    </div>
-                    <button>
-                        <BsFillPlayCircleFill color='white'/>
-                    </button>
-                </div>
-                <div className={styles.musicOfPlaylist}>
-                    <div className={styles.musicDetailsOfPlaylist}>
-                        <h3>Massacration</h3>
-                        <p>Metal Bucetation</p>
-                    </div>
-                    <button>
-                        <BsFillPlayCircleFill color='white'/>
-                    </button>
-                </div>
+                {myPlaylist.map((musicOflist, key: number) => {
+                    return (
+                        <div key={key} className={styles.musicOfPlaylist}>
+                            <div className={styles.musicDetailsOfPlaylist}>
+                                <h3>{musicOflist.nameBand}</h3>
+                                <p>{musicOflist.nameMusic}</p>
+                            </div>
+                            <button onClick={() => { PlaySongOfPlaylist(key) }}>
+                                <BsFillPlayCircleFill color='white' />
+                            </button>
+                        </div>
+                    )
+                })
+
+                }
             </div>
         </div>
     )
