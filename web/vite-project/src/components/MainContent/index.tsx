@@ -69,8 +69,12 @@ export function MainContent() {
                 <div className={styles.header}>
                     <h1>Home</h1>
                     <form action="search">
-                        <input type="text" />
-                        <button type='submit'><BsSearch color='white' /></button>
+                        <input type="text" onChange={(e)=>{
+                            console.log(e.target.value)
+                        }}/>
+                        <button type='submit'>
+                            <BsSearch color='white' />
+                        </button>
                     </form>
                 </div>
                 <div className={styles.topMusics} ref={carroseul}>
