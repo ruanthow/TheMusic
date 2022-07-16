@@ -22,4 +22,27 @@ export class MusicRepositoryPrisma implements IMusicsRepository{
               }
           })
       }
+
+      async searchMusic(keyFind:string): Promise<Object | null> {
+          const result = await prisma.music.findMany({
+            where:{
+                OR:[
+                    {
+                        nameMusic: {
+                            contains: keyFind
+                        }
+                    },
+                    {
+                        nameBand:{
+                            contains: keyFind
+                        }
+                    }
+                        
+                ]
+            }
+            
+            
+          })
+          return result
+      }
 }
