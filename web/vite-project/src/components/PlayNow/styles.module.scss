@@ -4,7 +4,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 55rem;
+    max-width: 500px;
+    min-width: 350px;
 
     overflow: hidden;
 
@@ -96,8 +97,8 @@
         background: none;
         border-radius: 100%;
 
-        width: 30px;
-        height: 30px;
+        width: 2rem;
+        height: 2rem;
 
         transition: all 0.2s;
 
@@ -130,6 +131,8 @@
         transition: all 0.5s;
         width: 0;
         opacity: 0;
+        display: hidden;
+        visibility: hidden;
     }
     
     .titleOfList{
@@ -151,8 +154,8 @@
         background: none;
         border-radius: 100%;
 
-        width: 45px;
-        height: 45px;
+        width: 3rem;
+        height: 3rem;
 
         transition: all 0.2s;
 
@@ -179,7 +182,7 @@
     .playerlist{
         width: 80%;
         overflow-y: auto;
-        max-height: 185px;
+        max-height: calc(100vh / 5);
         min-height: 0;
         
         &::-webkit-scrollbar{
@@ -243,4 +246,44 @@
         }
     }
    
+}
+
+@media only screen and (max-width: 1440px){
+
+    .container{
+        .controllersButtons{
+            .othersButtons{
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+        }
+
+        .playerButton{
+            width: 2.5rem;
+            height:2.5rem;
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px){
+
+    .container{
+        .controllersButtons{
+            .othersButtons{
+                width: 1.3rem;
+                height: 1.3rem;
+            }
+        }
+
+        .playerButton{
+            width: 2rem;
+            height:2rem;
+        }
+    }
+}
+
+@media only screen and (max-width: 375px ) {
+    .container{
+        display: none;
+    }
 }

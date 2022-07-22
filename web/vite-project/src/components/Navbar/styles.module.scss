@@ -52,3 +52,9 @@
         margin-top: 6rem;
     }
 }
+
+@media only screen and (max-width: 375px ) {
+    .container{
+        display: none;
+    }
+}

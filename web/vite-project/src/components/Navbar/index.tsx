@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import {useNavigate} from 'react-router-dom'
+
 import { AiFillHome, AiFillStar } from 'react-icons/ai'
 import { ImMusic, ImShare2 } from 'react-icons/im'
 import { BsFillGearFill } from 'react-icons/bs'
@@ -7,11 +9,14 @@ import styles from './styles.module.scss';
 
 export function Navbar() {
     
+    const navegation = useNavigate()
 
     return (
         <div className={styles.container}>
             <div className={styles.buttons}>
-                <button>
+                <button onClick={() => {
+                    navegation('/')
+                }}>
                     <AiFillHome color='white' />
                 </button>
                 <button>

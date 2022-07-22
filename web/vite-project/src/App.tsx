@@ -1,6 +1,7 @@
 import { MainContentContextProvider } from "./components/UseContext/MainContentContext"
 import { PlaynowContextsProvider } from "./components/UseContext/PlaynowContext"
 import { Home } from "./pages/Home"
+import { MyRoutes } from "./routes/router"
 
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
     <PlaynowContextsProvider>
     <MainContentContextProvider>
       <div className="App">
-        <Home/>
+        <MyRoutes/>
       </div>
     </MainContentContextProvider>
     </PlaynowContextsProvider>

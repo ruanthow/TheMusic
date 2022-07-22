@@ -1,8 +1,9 @@
 
 
-import { Key, useContext, useRef} from 'react'
+import { Key, useContext, useRef, useState} from 'react'
 import { useQuery } from 'react-query'
 import { MainContentContexts } from '../UseContext/MainContentContext';
+import {useNavigate} from 'react-router-dom'
 
 import axios from 'axios';
 
@@ -28,11 +29,15 @@ interface MusicType {
 
 export function MainContent() {
 
+    const navegation = useNavigate()
+    const [keyQuery, setKeyQuery] = useState<string | ''>()
+    const [resultKeyQuery, setResultKeyQuery] = useState<Array<Object>>()
     const carroseul = useRef<HTMLDivElement | null>(null);
     const { setMyPlaylist } = useContext(MainContentContexts)
     const { setIndexPlaylist } = useContext(PlaynowContexts)
+    
     const { data } = useQuery('getTopMusics', async function getTopMusics() {
-        try {
+        try{
             const response = await axios.get(`${import.meta.env.VITE_LOCAL_CONECTION}music/all_music`)
             return response.data
 
@@ -43,6 +48,13 @@ export function MainContent() {
     }, {
         staleTime: 1000 * 60 * 60
     })
+
+    async function SearchSong(){
+        navegation(`search?key=${keyQuery}`)
+        const respose = await axios.post(`${import.meta.env.VITE_LOCAL_CONECTION}search?key=${keyQuery}`)
+        setResultKeyQuery(respose.data)
+        
+    }
 
 
     function ArrowRightTopMusic() {
@@ -70,15 +82,18 @@ export function MainContent() {
                     <h1>Home</h1>
                     <form action="search">
                         <input type="text" onChange={(e)=>{
-                            console.log(e.target.value)
+                            setKeyQuery(e.target.value)
                         }}/>
-                        <button type='submit'>
+                        <button type='submit' onClick={(e) => {
+                          e.preventDefault()
+                          SearchSong()
+                        }}>
                             <BsSearch color='white' />
                         </button>
                     </form>
                 </div>
                 <div className={styles.topMusics} ref={carroseul}>
-                    {data?.map((music: MusicType, key: Key) => {
+                    { resultKeyQuery == null ? data?.map((music: MusicType, key: Key) => {
                         return (
                             <div
                                 key={key}
@@ -97,7 +112,30 @@ export function MainContent() {
                                 </div>
                             </div>
                         )
-                    })}
+                    })
+                    :
+                    resultKeyQuery?.map((music: MusicType, key: Key) => {
+                        return (
+                            <div
+                                key={key}
+                                className={styles.music}
+                                    onClick={() => {
+                                    setIndexPlaylist(0)
+                                    setMyPlaylist([music])     
+                                }}
+                            >
+                                <div className={styles.musicImage}>
+                                    <img src={music.imagem} alt="capa do album" />
+                                </div>
+                                <div className={styles.musicDetails}>
+                                    <p>{music.nameBand}</p>
+                                    <p>{music.nameMusic}</p>
+                                </div>
+                            </div>
+                        )
+                    })
+
+                }
                 </div>
                 <div className={styles.buttonsArrows}>
                     <div className={styles.buttonArrowLeft} onClick={ArrowLeftTopMusic}>
