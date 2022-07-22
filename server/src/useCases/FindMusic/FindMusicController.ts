@@ -15,9 +15,9 @@ export class FindMusicController{
 
     async execute(req:Request, res:Response){
 
-        const {keyFind} = req.body
-
-        try {
+        const keyFind = req.query.key
+        
+        try {   
            const result = await this.findusicUseCases.execute(keyFind)
             return res.json(result)
             
