@@ -52,8 +52,8 @@
         }
 
         & form button svg {
-            height: 25px;
-            width: 25px;
+            height: 1.5rem;
+            width: 1.5rem;
         }
 
         & form button:active svg {
@@ -61,13 +61,13 @@
 
             @keyframes buttonEffect {
                 to {
-                    height: 20px;
-                    width: 20px;
+                    height: 1.5rem;
+                    width: 1.5rem;
                 }
 
                 from {
-                    height: 25px;
-                    width: 25px;
+                    height: 1.5625rem;
+                    width: 1.5625rem;
                 }
             }
         }
@@ -91,8 +91,8 @@
         }
 
         & .musicImage {
-            height: 200px;
-            width: 200px;
+            height: 12.5rem;
+            width: 12.5rem;
             cursor: pointer;
             position: relative;
 
@@ -100,7 +100,7 @@
                 object-fit: cover;
                 width: 100%;
                 height: 100%;
-                border-radius: 8px;
+                border-radius: 0.5rem;
             }
         }
 
@@ -281,7 +281,7 @@
             left: 0rem;
             top: 3rem;
             position: absolute;
-            min-width: 160px;
+            min-width: 10rem;
             z-index: 9;
 
             
@@ -333,7 +333,7 @@
             & img {
                 object-fit: contain;
                 margin: 1rem;
-                max-width: 350px;
+                max-width: 21.875rem;
             }
         }
     }
@@ -367,7 +367,7 @@
             
 
             img{
-                width: 150px;
+                width: 9.375rem;
             }
         }
     }
@@ -378,8 +378,8 @@
        .topMusics{
             .music{
                 .musicImage{
-                    width: 150px;
-                    height: 150px;
+                    width: 9.375rem;
+                    height: 9.375rem;
                 }
                 .musicDetails{
                     p{
@@ -392,9 +392,122 @@
     }
 }
 
-@media only screen and (max-width: 375px ) {
+@media only screen and (max-width: 600px ) {
     .container{
-        width: 100%;
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+
+        .mainBody{
+            h3{
+                margin-top: 2rem;
+            }
+
+            .header{
+                h1{
+                    display: none;
+                }
+
+                form input{
+                    height: 2rem;
+                    font-size: 10pt;
+                }
+
+                form button{
+                    height: 2rem;
+                    width: 3rem;
+                }
+
+                form button svg{
+                    height: 1.2rem;
+                    width: 1.2rem;
+                }
+            }
+
+            .topMusics{
+
+                .music{
+
+                    .musicImage{
+                        height: 7rem;
+                        width: 7rem;
+                    }
+
+                    .musicDetails{
+                        p{
+                            font-size: 10pt;
+                        }
+                    }
+                }
+            }
+
+            .footer{
+                display: flex;
+
+                .maisTocadas{
+                    width: 100%;
+                    .dataItem{
+                        .buttonsMaisTocadas{
+                            display: none;
+                        }
+                    }
+                    .dataItem:hover{
+                        margin-right: 0.5rem;
+                        position: relative;
+                        .buttonsMaisTocadas{
+                            
+                            display: block;
+                            position: absolute;
+                            background: rgba(0, 0, 0, 0.747);
+                            width: 100%;
+                            height: 100%;
+
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            button{
+                                height: 2.5rem;
+                                width: 2.5rem;
+
+                                margin: 1rem;
+
+                                background: transparent;
+                                border: 0;
+
+                                svg{
+                                    height: 2.5rem;
+                                    width: 2.5rem;
+                                }
+                            }
+
+                            button:active{
+                                
+                                svg{
+                                    height: 2rem;
+                                    width: 2rem;
+                                }
+                            }
+
+                            .dropoptions{
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                button:last-child{
+                                    height: 2.5rem;
+                                    width: 2.5rem;
+                                    
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+        }
     }
+
 }
 

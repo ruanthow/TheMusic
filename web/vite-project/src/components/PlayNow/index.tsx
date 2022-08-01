@@ -3,10 +3,11 @@ import { Key, useContext, useEffect, useRef, useState } from 'react';
 
 import Slider from 'rc-slider'
 import { FiRepeat, FiSkipBack, FiSkipForward } from 'react-icons/fi'
-import { BsFillPlayCircleFill, BsVolumeUp, BsPauseCircleFill } from 'react-icons/bs'
+import { BsFillPlayCircleFill, BsVolumeUp, BsPauseCircleFill, BsChevronDown } from 'react-icons/bs'
 import { BiShuffle } from 'react-icons/bi'
 import { FaTrash } from 'react-icons/fa'
 import { FaListUl } from 'react-icons/fa'
+import { AiFillCloseCircle } from 'react-icons/ai'
 
 
 import 'rc-slider/assets/index.css'
@@ -22,13 +23,17 @@ import { PlaynowContexts } from '../UseContext/PlaynowContext';
 
 
 export function PlayNow() {
-    const { myPlaylist, setMyPlaylist } = useContext(MainContentContexts)
-    const { indexPlaylist, isPlaying, setIndexPlaylist, setIsPlaying, isShuffle, setIsShuffle, isLooping, setIsLooping, isShowList, setIsShowList } = useContext(PlaynowContexts)
-    const [progress, setProgress] = useState<number>()
-    const [isHiddenSliderVolume, setIsHiddenSliderVolume] = useState<boolean>(false)
+    const { myPlaylist, setMyPlaylist, windowWidth600 } = useContext(MainContentContexts);
+    const {slidePageMobile, setSlidePageMobile, hiddenPlayer, setHiddenPlayer} = useContext(PlaynowContexts);
+    const { indexPlaylist, isPlaying, setIndexPlaylist, setIsPlaying, isShuffle, setIsShuffle, isLooping, setIsLooping, isShowList, setIsShowList } = useContext(PlaynowContexts);
+    const [progress, setProgress] = useState<number>();
+    const [isHiddenSliderVolume, setIsHiddenSliderVolume] = useState<boolean>(false);
+    const [heightPlaylistMobile, setHeightPlaylistMobile] = useState('0')
 
-    const [volume, setVolume] = useState<number>(10)
-    const audioRef = useRef<HTMLAudioElement | null>(null)
+    const [volume, setVolume] = useState<number>(10);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+
 
     function Progress() {
         if (audioRef.current) {
@@ -68,17 +73,10 @@ export function PlayNow() {
         }
 
         else if (isShuffle) {
-            let nextNumber: number = Math.floor(Math.random() * myPlaylist.length);
-            let safeNumber: number = Math.floor(Math.random() * myPlaylist.length);
-            let currentNumber: number
 
-            if (nextNumber != currentNumber) {
-                currentNumber = nextNumber
-                setIndexPlaylist(currentNumber)
-            }
-            else {
-                setIndexPlaylist(safeNumber)
-            }
+            let nextNumber: number = Math.floor(Math.random() * (myPlaylist.length - 0) + 0 );
+            
+            setIndexPlaylist(nextNumber)
 
         }
     }
@@ -150,7 +148,7 @@ export function PlayNow() {
         if (isLooping) {
             if (indexPlaylist + 1 == myPlaylist.length) {
                 setIndexPlaylist(0)
-
+                setIsPlaying(true)
             }
         }
     }
@@ -181,9 +179,24 @@ export function PlayNow() {
             setIsLooping(false)
         }
     })
+    
+    
     return (
 
-        <div className={styles.container}>
+        <div className={styles.container} style={{left:slidePageMobile, transition:'0.5s', visibility:hiddenPlayer}}>
+            {windowWidth600 &&
+                <div className={styles.buttonClosePlayer}>
+                    <button onClick={() =>{
+                        if(slidePageMobile == 0){
+                            setSlidePageMobile(-400)
+                            setHiddenPlayer('hidden')
+                            
+                        }
+                    }}>
+                        <AiFillCloseCircle color='white'/>
+                    </button>
+                </div>
+            }
             <h2>{myPlaylist[indexPlaylist]?.imagem ? "Tocando Agora" : "Selecione uma musica"}</h2>
             <div className={styles.imgCover}>
                 <img src={myPlaylist[indexPlaylist]?.imagem ? myPlaylist[indexPlaylist].imagem : logo} alt="" />
@@ -220,7 +233,14 @@ export function PlayNow() {
             </div>
             <div className={styles.controllersButtons}>
                 <button className={styles.othersButtons} onClick={() => {
-                    ShowListOfSongs(isShowList)
+                    if(windowWidth600){
+                        setHeightPlaylistMobile('50vh')
+                    }
+                    else{
+                        ShowListOfSongs(isShowList)
+                    }
+                    
+                    
                 }} >
                     {isShowList ? <FaListUl color="white" /> : <FaListUl />}
                 </button>
@@ -274,7 +294,7 @@ export function PlayNow() {
                 />
             </div>
             {
-                isShowList ?
+                isShowList && !windowWidth600 &&
                     <>
                         <div className={styles.titleOfList}>
                             <p>Em fila</p>
@@ -301,11 +321,43 @@ export function PlayNow() {
 
                             }
                         </div>
-                    </> 
-                    :
-                    <>
-                    </> 
+                    </>      
             }
+            {
+                isShowList && windowWidth600 &&
+
+                <div className={styles.playlistMobile} style={{height:heightPlaylistMobile, transition:'1s'}}>
+                    <div className={styles.playerlist}>
+                        <span onClick={() =>{
+                            setHeightPlaylistMobile('0')
+                            
+                        }}>
+                            <BsChevronDown/>
+                        </span>
+                            {myPlaylist.map((musicOflist, key: number) => {
+                                return (
+                                    <div key={key} className={styles.musicOfPlaylist}>
+                                        <div className={styles.musicDetailsOfPlaylist}>
+                                            <h3>{musicOflist.nameBand}</h3>
+                                            <p>{musicOflist.nameMusic}</p>
+                                        </div>
+                                        <button onClick={() => { PlaySongOfPlaylist(key) }}>
+                                            <BsFillPlayCircleFill color='white' />
+                                        </button>
+                                        <button className={styles.buttonRemoveItem} onClick={() => {
+                                            RemoveSongOfPlaylist(key)
+                                        }}>
+                                            <FaTrash />
+                                        </button>
+                                    </div>
+                                )
+                            })
+
+                            }
+                        </div>
+                </div>
+            }
+
         </div>
     )
 }
