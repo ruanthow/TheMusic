@@ -1,9 +1,11 @@
 @use '../../styles/themes';
 
+
 .container {
     background: themes.$brand;
     width: 80vw;
     overflow: hidden;
+
 
     & .mainBody {
         overflow: hidden;
@@ -16,6 +18,10 @@
         margin-bottom: 1rem;
     }
 
+    .buttonsMaisTocadasMobile{
+        display: none;
+    }
+    
     .header {
 
         & h1 {
@@ -338,6 +344,11 @@
         }
     }
 
+    .controlWeb{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 
@@ -393,11 +404,15 @@
 }
 
 @media only screen and (max-width: 600px ) {
+    
     .container{
         display: flex;
         width: 100vw;
         height: 100vh;
 
+        .playLists, .controlWeb, .buttonsArrows{
+            display: none;
+        }
         .mainBody{
             h3{
                 margin-top: 2rem;
@@ -447,14 +462,15 @@
                 .maisTocadas{
                     width: 100%;
                     .dataItem{
-                        .buttonsMaisTocadas{
+                        .buttonsMaisTocadasMobile{
                             display: none;
                         }
                     }
                     .dataItem:hover{
                         margin-right: 0.5rem;
                         position: relative;
-                        .buttonsMaisTocadas{
+                        
+                        .buttonsMaisTocadasMobile{
                             
                             display: block;
                             position: absolute;

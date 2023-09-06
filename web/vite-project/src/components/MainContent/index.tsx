@@ -30,12 +30,12 @@ interface MusicType {
 export function MainContent() {
 
     const navegation = useNavigate()
-    const [buttonOptionsMobile, setButtonOptionsMobile] = useState(false)
-    const [keyQuery, setKeyQuery] = useState<string | ''>('')
-    const [resultKeyQuery, setResultKeyQuery] = useState<Array<Object>>()
+    const [buttonOptionsMobile, setButtonOptionsMobile] = useState(false);
+    const [keyQuery, setKeyQuery] = useState<string | ''>('');
+    const [resultKeyQuery, setResultKeyQuery] = useState<Array<Object>>();
     const carroseul = useRef<HTMLDivElement | null>(null);
-    const { setMyPlaylist, GetWidthWindowDevice, windowWidth600 } = useContext(MainContentContexts)
-    const { setIndexPlaylist } = useContext(PlaynowContexts)
+    const { setMyPlaylist } = useContext(MainContentContexts);
+    const { setIndexPlaylist } = useContext(PlaynowContexts);
 
     const { data } = useQuery('getTopMusics', async function getTopMusics() {
         try {
@@ -57,7 +57,6 @@ export function MainContent() {
 
     }
 
-
     function ArrowRightTopMusic() {
         if (carroseul.current) {
             carroseul.current.scrollLeft += carroseul.current.offsetWidth;
@@ -65,6 +64,7 @@ export function MainContent() {
         }
 
     }
+
     function ArrowLeftTopMusic() {
         if (carroseul.current) {
             carroseul.current.scrollLeft -= carroseul.current.offsetWidth;
@@ -75,10 +75,6 @@ export function MainContent() {
     function handleMoveToPlaylist(intoMusicFromPlayist: MusicType) {
         setMyPlaylist((results) => [...results, intoMusicFromPlayist])
     }
-
-    useEffect(() => {
-        GetWidthWindowDevice()
-    })
 
     return (
         <div className={styles.container}>
@@ -142,16 +138,15 @@ export function MainContent() {
 
                     }
                 </div>
-                {   !windowWidth600 &&
-                    <div className={styles.buttonsArrows}>
-                        <div className={styles.buttonArrowLeft} onClick={ArrowLeftTopMusic}>
-                            <IoIosArrowBack color='white' />
-                        </div>
-                        <div className={styles.buttonArrowRight} onClick={ArrowRightTopMusic}>
-                            <IoIosArrowForward color='white' />
-                        </div>
+
+                <div className={styles.buttonsArrows}>
+                    <div className={styles.buttonArrowLeft} onClick={ArrowLeftTopMusic}>
+                        <IoIosArrowBack color='white' />
                     </div>
-                }
+                    <div className={styles.buttonArrowRight} onClick={ArrowRightTopMusic}>
+                        <IoIosArrowForward color='white' />
+                    </div>
+                </div>
                 <h3>Mais Tocadas</h3>
                 <div className={styles.footer}>
                     <div className={styles.maisTocadas}>
@@ -163,56 +158,49 @@ export function MainContent() {
                                         <p>{music.nameBand}</p>
                                         <p>{music.nameMusic}</p>
                                     </div>
-                                    {!windowWidth600 ?
-                                        <>
-                                            <button className={styles.buttonPlay}>
-                                                <AiOutlinePlayCircle color='white' />
+                                    <div className={styles.controlWeb}>
+                                        <button className={styles.buttonPlay}>
+                                            <AiOutlinePlayCircle color='white' />
+                                        </button>
+                                        <div className={styles.dropdown}>
+                                            <button className={styles.dropbtn}>
+                                                <AiOutlineBars />
                                             </button>
-
-                                            <div className={styles.dropdown}>
-                                                <button className={styles.dropbtn}>
-                                                    <AiOutlineBars />
-                                                </button>
-                                                <div className={styles.dropdownContent}>
-                                                    <button onClick={() => {
-                                                        handleMoveToPlaylist(music)
-                                                    }}
-                                                    >
-                                                        Adicionar a Playlist
-                                                    </button>
-                                                    <button>
-                                                        Favoritar musica
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </>
-
-                                        :
-
-                                        <div className={styles.buttonsMaisTocadas}>
-                                            <button>
-                                                <AiOutlinePlayCircle color='white' />
-                                            </button>
-                                            <div className={styles.dropoptions}>
+                                            <div className={styles.dropdownContent}>
                                                 <button onClick={() => {
                                                     handleMoveToPlaylist(music)
-                                                }}>
-                                                    <AiOutlinePlusCircle color='white' />
+                                                }}
+                                                >
+                                                    Adicionar a Playlist
+                                                </button>
+                                                <button>
+                                                    Favoritar musica
                                                 </button>
                                             </div>
                                         </div>
-                                    }
+                                    </div>
+                                     {/* Mobile designer*/}               
+                                    <div className={styles.buttonsMaisTocadasMobile}>
+                                        <button>
+                                            <AiOutlinePlayCircle color='white' />
+                                        </button>
+                                        <div className={styles.dropoptions}>
+                                            <button onClick={() => {
+                                                handleMoveToPlaylist(music)
+                                            }}>
+                                                <AiOutlinePlusCircle color='white' />
+                                            </button>
+                                        </div>
+                                    </div>
+                                   {/* Mobile designer*/}         
                                 </div>
                             )
                         })}
                     </div>
-                    {
-                        !windowWidth600 &&
-                        <div className={styles.playLists}>
-                            <img src={list} alt="" />
-                            <img src={list} alt="" />
-                        </div>
-                    }
+                    <div className={styles.playLists}>
+                        <img src={list} alt="" />
+                        <img src={list} alt="" />
+                    </div>
                 </div>
             </div>
         </div>

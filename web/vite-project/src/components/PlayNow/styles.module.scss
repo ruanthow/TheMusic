@@ -1,5 +1,9 @@
 @use '../../styles/themes';
 
+.buttonClosePlayer, .playlistMobile{
+    display: none;
+}
+
 .container{
     
     display: flex;
@@ -248,7 +252,14 @@
             
         }
     }
-   
+    .containerList{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 95%;
+    }
+
 }
 
 @media only screen and (max-width: 1440px){
@@ -286,7 +297,9 @@
 }
 
 @media only screen and (max-width: 600px ) {
-    
+    .containerList{
+        display: none;
+    }
     .container{
         z-index: 1;
         display: flex;
@@ -345,6 +358,7 @@
        }
 
        .playlistMobile{
+            display: flex;
             height: 50vh;
             width: 100vw;
             min-height: 0;

@@ -30,7 +30,7 @@ interface PlaynowContextsProps{
 export const PlaynowContexts = createContext({} as PlaynowContextsData) 
 
 export function PlaynowContextsProvider({children}:PlaynowContextsProps){
-    const [slidePageMobile, setSlidePageMobile] = useState<number>(-400);
+    const [slidePageMobile, setSlidePageMobile] = useState<number>(-800);
     const [hiddenPlayer, setHiddenPlayer] = useState<'visible' | 'hidden' | 'collapse'>('visible')
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const [indexPlaylist, setIndexPlaylist] = useState(0)

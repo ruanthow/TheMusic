@@ -23,8 +23,8 @@ import { PlaynowContexts } from '../UseContext/PlaynowContext';
 
 
 export function PlayNow() {
-    const { myPlaylist, setMyPlaylist, windowWidth600 } = useContext(MainContentContexts);
-    const {slidePageMobile, setSlidePageMobile, hiddenPlayer, setHiddenPlayer} = useContext(PlaynowContexts);
+    const { myPlaylist, setMyPlaylist} = useContext(MainContentContexts);
+    const { slidePageMobile, setSlidePageMobile, hiddenPlayer, setHiddenPlayer } = useContext(PlaynowContexts);
     const { indexPlaylist, isPlaying, setIndexPlaylist, setIsPlaying, isShuffle, setIsShuffle, isLooping, setIsLooping, isShowList, setIsShowList } = useContext(PlaynowContexts);
     const [progress, setProgress] = useState<number>();
     const [isHiddenSliderVolume, setIsHiddenSliderVolume] = useState<boolean>(false);
@@ -74,8 +74,8 @@ export function PlayNow() {
 
         else if (isShuffle) {
 
-            let nextNumber: number = Math.floor(Math.random() * (myPlaylist.length - 0) + 0 );
-            
+            let nextNumber: number = Math.floor(Math.random() * (myPlaylist.length - 0) + 0);
+
             setIndexPlaylist(nextNumber)
 
         }
@@ -153,10 +153,6 @@ export function PlayNow() {
         }
     }
 
-    function ShowListOfSongs(value) {
-        setIsShowList(!value)
-    }
-
     useEffect(() => {
 
         if (!audioRef.current) {
@@ -179,24 +175,36 @@ export function PlayNow() {
             setIsLooping(false)
         }
     })
-    
-    
+
+    function ResetPlayerPositionOffMobile(){
+        let w = window.innerWidth
+
+        if(w >= 600){
+            setSlidePageMobile(0)
+            setHiddenPlayer('visible')
+        }
+        
+    }
+
+    useEffect(() =>{
+        window.addEventListener('resize', ResetPlayerPositionOffMobile)
+    },[])
+
+
     return (
 
-        <div className={styles.container} style={{left:slidePageMobile, transition:'0.5s', visibility:hiddenPlayer}}>
-            {windowWidth600 &&
-                <div className={styles.buttonClosePlayer}>
-                    <button onClick={() =>{
-                        if(slidePageMobile == 0){
-                            setSlidePageMobile(-400)
-                            setHiddenPlayer('hidden')
-                            
-                        }
-                    }}>
-                        <AiFillCloseCircle color='white'/>
-                    </button>
-                </div>
-            }
+        <div className={styles.container} style={{ left: slidePageMobile, transition: '0.5s', visibility: hiddenPlayer }}>
+
+            <div className={styles.buttonClosePlayer}>
+                <button onClick={() => {
+                    if (slidePageMobile == 0) {
+                        setSlidePageMobile(-800)
+                        setHiddenPlayer('hidden')
+                    }
+                }}>
+                    <AiFillCloseCircle color='white' />
+                </button>
+            </div>
             <h2>{myPlaylist[indexPlaylist]?.imagem ? "Tocando Agora" : "Selecione uma musica"}</h2>
             <div className={styles.imgCover}>
                 <img src={myPlaylist[indexPlaylist]?.imagem ? myPlaylist[indexPlaylist].imagem : logo} alt="" />
@@ -221,7 +229,7 @@ export function PlayNow() {
                     className={styles.slider}
                     max={myPlaylist[indexPlaylist]?.minutes}
                     value={progress}
-                    onChange={(e:any) => {
+                    onChange={(e: any) => {
                         HandleBarProgress(e)
                     }}
 
@@ -233,14 +241,11 @@ export function PlayNow() {
             </div>
             <div className={styles.controllersButtons}>
                 <button className={styles.othersButtons} onClick={() => {
-                    if(windowWidth600){
+                    
                         setHeightPlaylistMobile('50vh')
-                    }
-                    else{
-                        ShowListOfSongs(isShowList)
-                    }
-                    
-                    
+                   
+
+
                 }} >
                     {isShowList ? <FaListUl color="white" /> : <FaListUl />}
                 </button>
@@ -285,7 +290,7 @@ export function PlayNow() {
                     max={10}
                     min={0}
                     value={volume}
-                    onChange={(e:any) => {
+                    onChange={(e: any) => {
                         HandleVolume(e)
                     }}
                     trackStyle={{ backgroundColor: '#434366' }}
@@ -294,8 +299,9 @@ export function PlayNow() {
                 />
             </div>
             {
-                isShowList && !windowWidth600 &&
-                    <>
+                isShowList &&
+                <>
+                    <div className={styles.containerList}>
                         <div className={styles.titleOfList}>
                             <p>Em fila</p>
                         </div>
@@ -321,19 +327,15 @@ export function PlayNow() {
 
                             }
                         </div>
-                    </>      
-            }
-            {
-                isShowList && windowWidth600 &&
+                    </div>
 
-                <div className={styles.playlistMobile} style={{height:heightPlaylistMobile, transition:'1s'}}>
-                    <div className={styles.playerlist}>
-                        <span onClick={() =>{
-                            setHeightPlaylistMobile('0')
-                            
-                        }}>
-                            <BsChevronDown/>
-                        </span>
+                    <div className={styles.playlistMobile} style={{ height: heightPlaylistMobile, transition: '1s' }}>
+                        <div className={styles.playerlist}>
+                            <span onClick={() => {
+                                setHeightPlaylistMobile('0')
+                            }}>
+                                <BsChevronDown />
+                            </span>
                             {myPlaylist.map((musicOflist, key: number) => {
                                 return (
                                     <div key={key} className={styles.musicOfPlaylist}>
@@ -355,7 +357,9 @@ export function PlayNow() {
 
                             }
                         </div>
-                </div>
+                    </div>
+                </>
+
             }
 
         </div>

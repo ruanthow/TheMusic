@@ -1,5 +1,10 @@
 @use "../../styles/themes";
 
+
+.containerMobile{
+    display: none;
+}
+
 .container{
     background: themes.$bg;
     display: flex;
@@ -54,6 +59,9 @@
 }
 
 @media only screen and (max-width: 600px ) {
+    .container{
+        display: none;
+    }
     .containerMobile{
         display: flex;
         flex-direction: column;        
